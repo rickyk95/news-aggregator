@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <title>News Aggregator</title>
+
+
+
+    <link rel='stylesheet' type="text/css" href='styling.css'>
+
+</head>
+
+
+<body>
+
+<div id="header"> 
+
+    <h1 id = "mainTitle"> News Agregator </h1>
+
+    <h2> Get all of your news in one place </h2>
+
+</div>
+ 	
+   		
+    		
+
+ </div>
+
+   <div class="category">
+
+ 		 <div class= "title">
+
+ 			<h1> Aeon</h1>
+
+ 		 </div>
+   		
+      <div class="loadingWrap fetchAeon">
+
+        <div class = "loading" >
+
+          
+          
+
+        </div>
+
+    </div>
+      
+
+   </div>
+
+   <div class="category">
+
+      	<div class= "title">
+
+ 			    <h1> National Review </h1>
+
+ 		    </div>
+   		
+     <div class="loadingWrap fetchNationalReview">
+
+        <div class = "loading" >
+         
+         
+
+        </div>
+
+     </div>
+        	
+        
+
+   	    
+  </div>
+
+    <div class="category">
+
+     <div class= "title">
+
+ 		   	<h1> Vox </h1>
+
+ 		 </div>
+   		       
+      <div class="loadingWrap fetchVox">
+
+        <div class = "loading" >     
+         
+
+        </div>
+
+     </div>
+
+   </div>
+
+   	<div class="category">
+
+      <div class= "title">
+
+       <h1> New Scientist </h1>
+
+      </div>
+
+    <div class="loadingWrap fetchNewScientist">
+
+      <div class = "loading" >
+
+               
+      </div>
+
+    </div>
+   			
+
+   </div>
+
+
+  
+
+
+<script src = "/socket.io/socket.io.js"></script>
+
+<script> 
+
+//CREATE SOCKET INSTANCE FOR CLIENT SIDE
+  const socket = io()
+
+
+
+
+
+
+  //DECLARE ARRAY WITH THE NEWS OUTLETS' NAMES
+
+   var newsOutlets = ['fetchNewScientist','fetchVox','fetchAeon', 'fetchPhilArchive','fetchNationalReview'];
+
+
+    //LOOP THROUGH EACH OF THE NEWS OUTLET'S ARRAYS 
+
+    newsOutlets.forEach((outlet)=>{
+
+
+
+    //CREATE A SOCKET LISTENER FOR EACH OUTLET ARRAY
+        socket.on(outlet,(articleArray)=>{
+
+            //GRAB THE DIV WITH THE OUTLET'S CSS CLASS
+            let div = document.querySelector('.loadingWrap.'+ outlet)
+
+            // CREATE OPENING TAG FOR UL TEMPLATE LITERAL
+
+            let ul = `<ul>`
+
+            //LOOP THROUGH EACH OUTLET'S ARTICLE ARRAY AND CREATE A TEMPLATE LITERAL LIST FOR EACH ONE OF THEM
+
+            articleArray.forEach((article)=>{
+
+
+
+              ul += `<h6> <a href = ${article.link}>${article.title}</a></h6>`;
+          })
+
+ 
+
+            ul += `</ul>`
+
+            //INSERT THE TEMPLATE LITERAL LIST INTO ITS CORRESPONDING DIV
+
+            div.innerHTML = ul
+      })
+
+})
+
+
+  
+
+
+
+
+</script> 
+
+
+
+
+ 
+</body>
+</html>

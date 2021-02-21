@@ -1,20 +1,34 @@
-const app = require('express')()
+const express = require('express')
+
+const app = express()
+
 const http = require('http')
+
+const path = require('path')
 
 const server = http.createServer(app)
 
 const socketio = require('socket.io')
 
-const {fetchNewScientist, fetchPhilArchive,fetchVox,fetchNationalReview,fetchAeon} = require('./promises.js')
+const port = 4000 || process.env.PORT;
+
 
 const io = socketio(server)
 
-const redis = require('redis')
 
-const client = redis.createClient()
+const { fetchVox } = require('./promises/vox.js')
+
+const { fetchPhilArchive }  = require('./promises/philArchive.js')
+
+const { fetchAeon } = require('./promises/aeon.js')
+
+const { fetchNationalReview } = require('./promises/nationalReview.js')
+
+const { fetchNewScientist } = require('./promises/newScientist.js')
 
 
-
+//ADD MIDDLEWARE FUNCTION 
+//ATTACHES IO INSTANCE TO REQ OBJECT
 
 app.use(function(req,res,next){
 
@@ -22,6 +36,7 @@ app.use(function(req,res,next){
       next()
 })
 
+app.use(express.static(path.join(__dirname,'/views/css')))
 
 
 
@@ -31,22 +46,18 @@ const exphbs = require('express-handlebars')
 const hbs = exphbs.create({defaultLayout:false,});
 
 
-
-
 server.listen(4000,()=>{
 
-	console.log("listening on" , 4000)
+	console.log("listening on" , port)
 })
 
 
-app.engine('handlebars', hbs.engine);
+app.engine('handlebars', hbs.engine)
+
 app.set('view engine', 'handlebars')
 
 
-
-
-
-
+var array = [fetchPhilArchive,fetchVox,fetchAeon,fetchNationalReview,fetchNewScientist]
 
 
 
@@ -56,38 +67,25 @@ app.get('/', async (req,res) => {
 
      try{
 
-      let newScientist = await fetchNewScientist()
+      array.forEach( async (outlet)=>{
 
-      console.log(newScientist)
+          let outletArray = await outlet()
 
-      req.io.sockets.emit('newScientist',newScientist)
+          console.log(outletArray)
 
-      let philArchive = await fetchPhilArchive() 
+          req.io.sockets.emit(outlet.name,outletArray)
 
-     req.io.sockets.emit('philArchive',philArchive)
+      })
 
-     let vox = await fetchVox()
-
-     req.io.sockets.emit('vox',vox)
-
-     let nationalReview = await fetchNationalReview()
-
-     req.io.sockets.emit('nationalReview',nationalReview)
-
-     let aeon = await fetchAeon()
-
-     req.io.sockets.emit('aeon',aeon)
 
 
 
      }catch(e){
 
-        res.send('Error loading')
+        res.send(e)
 
      }
-    
-       
-      
+         
            
     }) 
 
