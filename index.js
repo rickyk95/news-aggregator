@@ -82,7 +82,7 @@ app.get('/', async (req,res) => {
 
      }catch(e){
 
-        res.send(e)
+        res.send("Error" + e)
 
      }
          
