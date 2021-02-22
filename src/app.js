@@ -68,26 +68,6 @@ app.get('/', async (req,res) => {
     
         res.render('home')
 
-     try{
-
-      array.forEach( async (outlet)=>{
-
-          let outletArray = await outlet()
-
-          console.log(outletArray)
-
-          req.io.sockets.emit(outlet.name,outletArray)
-
-      })
-
-
-
-
-     }catch(e){
-
-        res.send("Error" + e)
-
-     }
          
            
     }) 
