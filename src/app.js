@@ -70,13 +70,18 @@ app.get('/', async (req,res) => {
 
      try{
 
-      array.forEach( async (outlet)=>{
+    
 
-          let outletArray = await outlet()
+          //req.io.sockets.emit(outlet.name,outletArray)
 
-          console.log(outletArray)
+          req.io.on('connection', (socket) =>{
 
-          req.io.sockets.emit(outlet.name,outletArray)
+                 array.forEach(async(outlet)=>{
+
+                 let outletArray = await outlet()              
+
+                  socket.emit(outlet.name,outletArray)
+          })
 
       })
 
