@@ -16,15 +16,15 @@ const port = 4000 || process.env.PORT;
 const io = socketio(server)
 
 
-const { fetchVox } = require('./promises/vox.js')
+const { fetchVox } = require('../promises/vox.js')
 
-const { fetchPhilArchive }  = require('./promises/philArchive.js')
+const { fetchPhilArchive }  = require('../promises/philArchive.js')
 
-const { fetchAeon } = require('./promises/aeon.js')
+const { fetchAeon } = require('../promises/aeon.js')
 
-const { fetchNationalReview } = require('./promises/nationalReview.js')
+const { fetchNationalReview } = require('../promises/nationalReview.js')
 
-const { fetchNewScientist } = require('./promises/newScientist.js')
+const { fetchNewScientist } = require('../promises/newScientist.js')
 
 
 //ADD MIDDLEWARE FUNCTION 
@@ -36,7 +36,7 @@ app.use(function(req,res,next){
       next()
 })
 
-app.use(express.static(path.join(__dirname,'/views/css')))
+app.use(express.static(path.join(__dirname,'../views/css')))
 
 
 
@@ -55,6 +55,8 @@ server.listen(4000,()=>{
 app.engine('handlebars', hbs.engine)
 
 app.set('view engine', 'handlebars')
+
+app.set('views',path.join(__dirname,'../views'))
 
 
 var array = [fetchPhilArchive,fetchVox,fetchAeon,fetchNationalReview,fetchNewScientist]
