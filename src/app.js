@@ -47,7 +47,7 @@ const exphbs = require('express-handlebars')
 const hbs = exphbs.create({defaultLayout:false,});
 
 
-server.listen(4000,()=>{
+server.listen(port,()=>{
 
 	console.log("listening on" , port)
 })
@@ -68,6 +68,26 @@ app.get('/', async (req,res) => {
     
         res.render('home')
 
+     try{
+
+      array.forEach( async (outlet)=>{
+
+          let outletArray = await outlet()
+
+          console.log(outletArray)
+
+          req.io.sockets.emit(outlet.name,outletArray)
+
+      })
+
+
+
+
+     }catch(e){
+
+        res.send("Error" + e)
+
+     }
          
            
     }) 
