@@ -28,7 +28,8 @@ const { fetchNewScientist } = require('../promises/newScientist.js')
 
 
 //ADD MIDDLEWARE FUNCTION 
-//ATTACHES IO INSTANCE TO REQ OBJECT
+
+//ATTACHES IO INSTANCE TO REQUEST OBJECT
 
 app.use(function(req,res,next){
 
